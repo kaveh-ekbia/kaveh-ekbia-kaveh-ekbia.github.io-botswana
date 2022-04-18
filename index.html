@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/SDE_DATA_BC_F7ADMIN3_1998_0.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-27.135410451249996,16.623537286138944],[-17.552648398750037,32.7367742188611]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_SDE_DATA_BC_F7ADMIN3_1998_0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COUNTRY_NA'] !== null ? autolinker.link(feature.properties['COUNTRY_NA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME1_'] !== null ? autolinker.link(feature.properties['NAME1_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME2_'] !== null ? autolinker.link(feature.properties['NAME2_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Language'] !== null ? autolinker.link(feature.properties['Language'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SDE_DATA_BC_F7ADMIN3_1998_0_0(feature) {
+            switch(String(feature.properties['Language'])) {
+                case 'Afrikaans':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,22,104,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Afrikaans, English':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,228,126,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'English':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(112,31,211,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ndebele':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(35,231,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ndebele, Handa':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,124,233,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ndebele, Shua':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,122,127,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Oshivambo, Afrikaans, Tshara-Tshao, Naro':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(74,203,45,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sepedi, Isixhosa, Isixhosa':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(131,214,29,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setswana':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(126,158,226,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setswana, Afrikaans, Handa':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(217,176,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setswana, Sepedi, Isixhosa':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(89,235,172,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setswana, Sepedi, Isixhosa, Nusan':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(203,74,14,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setswana, Tshara-Tshao':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(238,86,208,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Setwana, Sepedi, Isixhosa, Afrikaans, Tshara-Tshao':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(140,208,240,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Shua, Yeyi':
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(180,69,202,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_SDE_DATA_BC_F7ADMIN3_1998_0');
+        map.getPane('pane_SDE_DATA_BC_F7ADMIN3_1998_0').style.zIndex = 400;
+        map.getPane('pane_SDE_DATA_BC_F7ADMIN3_1998_0').style['mix-blend-mode'] = 'normal';
+        var layer_SDE_DATA_BC_F7ADMIN3_1998_0 = new L.geoJson(json_SDE_DATA_BC_F7ADMIN3_1998_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SDE_DATA_BC_F7ADMIN3_1998_0',
+            layerName: 'layer_SDE_DATA_BC_F7ADMIN3_1998_0',
+            pane: 'pane_SDE_DATA_BC_F7ADMIN3_1998_0',
+            onEachFeature: pop_SDE_DATA_BC_F7ADMIN3_1998_0,
+            style: style_SDE_DATA_BC_F7ADMIN3_1998_0_0,
+        });
+        bounds_group.addLayer(layer_SDE_DATA_BC_F7ADMIN3_1998_0);
+        map.addLayer(layer_SDE_DATA_BC_F7ADMIN3_1998_0);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_SDE_DATA_BC_F7ADMIN3_1998_0,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Language'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Language": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Language = document.createElement('div');
+            div_Language.id = "div_Language";
+            div_Language.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Language);
+            sel_Language = document.createElement('select');
+            sel_Language.multiple = true;
+            sel_Language.size = 10;
+            sel_Language.id = "sel_Language";
+            var Language_options_str = "<option value='' unselected></option>";
+            sel_Language.onchange = function(){filterFunc()};
+            Language_options_str  += '<option value="NULL">NULL</option>';
+            Language_options_str  += '<option value="Afrikaans">Afrikaans</option>';
+            Language_options_str  += '<option value="Afrikaans, English">Afrikaans, English</option>';
+            Language_options_str  += '<option value="English">English</option>';
+            Language_options_str  += '<option value="Ndebele">Ndebele</option>';
+            Language_options_str  += '<option value="Ndebele, Handa">Ndebele, Handa</option>';
+            Language_options_str  += '<option value="Ndebele, Shua">Ndebele, Shua</option>';
+            Language_options_str  += '<option value="Oshivambo, Afrikaans, Tshara-Tshao, Naro">Oshivambo, Afrikaans, Tshara-Tshao, Naro</option>';
+            Language_options_str  += '<option value="Sepedi, Isixhosa, Isixhosa">Sepedi, Isixhosa, Isixhosa</option>';
+            Language_options_str  += '<option value="Setswana">Setswana</option>';
+            Language_options_str  += '<option value="Setswana, Afrikaans, Handa">Setswana, Afrikaans, Handa</option>';
+            Language_options_str  += '<option value="Setswana, Sepedi, Isixhosa">Setswana, Sepedi, Isixhosa</option>';
+            Language_options_str  += '<option value="Setswana, Sepedi, Isixhosa, Nusan">Setswana, Sepedi, Isixhosa, Nusan</option>';
+            Language_options_str  += '<option value="Setswana, Tshara-Tshao">Setswana, Tshara-Tshao</option>';
+            Language_options_str  += '<option value="Setwana, Sepedi, Isixhosa, Afrikaans, Tshara-Tshao">Setwana, Sepedi, Isixhosa, Afrikaans, Tshara-Tshao</option>';
+            Language_options_str  += '<option value="Shua, Yeyi">Shua, Yeyi</option>';
+            sel_Language.innerHTML = Language_options_str;
+            div_Language.appendChild(sel_Language);
+            var lab_Language = document.createElement('div');
+            lab_Language.innerHTML = 'Language';
+            lab_Language.className = 'filterlabel';
+            div_Language.appendChild(lab_Language);
+            var reset_Language = document.createElement('div');
+            reset_Language.innerHTML = 'clear filter';
+            reset_Language.className = 'filterlabel';
+            reset_Language.onclick = function() {
+                var options = document.getElementById("sel_Language").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Language.appendChild(reset_Language);
+        </script>
+    </body>
+</html>

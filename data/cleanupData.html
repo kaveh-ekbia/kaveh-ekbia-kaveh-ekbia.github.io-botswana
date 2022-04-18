@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+
+    <!-- Replace this after every step with the new data file-->
+    <!-- <script src="Eth_Region_2013_Project_Merg_1.js"></script> -->
+    <script src="data (2).js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5.1.6/turf.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
+</head>
+<body>
+
+<div id="map" style="height: 500px; width: 500px"></div>
+
+<script>
+
+    var map = L.map("map").setView([0,0],6);
+
+    // add the OpenStreetMap tiles
+    tile = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(map);
+
+
+    var g = null;
+    function addLayers(){
+        g = L.geoJson(json_SDE_DATA_BC_F7ADMIN3_1998_0,{
+            onEachFeature: function (f,l) {
+                var text = "";
+                for(key in f.properties){
+                    text += key+": "+f.properties[key]+"\n";
+                }
+                l.bindPopup(text)
+            }
+        }).addTo(map)
+        map.fitBounds(g.getBounds());
+    }
+    addLayers(); // If you want to show the layers
+
+
+
+    function SaveAsFile(t,f,m) {
+        try {
+            var b = new Blob([t],{type:m});
+            saveAs(b, f);
+        } catch (e) {
+            console.error(e);
+            window.open("data:"+m+"," + encodeURIComponent(t), '_blank','');
+        }
+    }
+
+    function removeNullProperties() {
+        var i = 0;
+        json_SDE_DATA_BC_F7ADMIN3_1998_0.features.forEach((f) => {
+            var props = {};
+
+            for (var key in f.properties) {
+                if (f.properties[key]) {
+                    props[key] = f.properties[key]
+                }else{
+                    i++;
+                }
+            }
+            f.properties = props
+        })
+        console.log(i+" properties with null removed")
+        SaveAsFile("var json_SDE_DATA_BC_F7ADMIN3_1998_0 = "+JSON.stringify(json_SDE_DATA_BC_F7ADMIN3_1998_0),"data.js","text/plain;charset=utf-8");
+    }
+
+
+    function removeExactDuplicates() {
+        var features = [];
+        json_SDE_DATA_BC_F7ADMIN3_1998_0.features.forEach((f) => {
+            var found = features.find((x) => _.isEqual(x.geometry, f.geometry));
+            if (!found) {
+                features.push(f);
+            }
+        });
+
+        console.log('changing from '+json_SDE_DATA_BC_F7ADMIN3_1998_0.features.length+" objects to "+features.length);
+        json_SDE_DATA_BC_F7ADMIN3_1998_0.features = features;
+        SaveAsFile("var json_Eth_Region_2013_Project_Merg_0 = "+JSON.stringify(json_SDE_DATA_BC_F7ADMIN3_1998_0),"data.js","text/plain;charset=utf-8");
+        return features;
+    }
+
+    function simplify(){
+        var features = [];
+        json_SDE_DATA_BC_F7ADMIN3_1998_0.features.forEach((f) => {
+            try {
+                features.push(turf.simplify(f, {tolerance: 0.005, highQuality: false}));
+            }catch (e) {
+                // Maybe some errors happens for some features
+                console.error(e);
+                console.log(f);
+            }
+        })
+        json_SDE_DATA_BC_F7ADMIN3_1998_0.features = features;
+        SaveAsFile("var json_SDE_DATA_BC_F7ADMIN3_1998_0 = "+JSON.stringify(json_SDE_DATA_BC_F7ADMIN3_1998_0),"data.js","text/plain;charset=utf-8");
+        return features;
+    }
+</script>
+
+</body>
+</html>
